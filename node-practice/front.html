@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <ul>
+      <li data-id="1" data-age="20"></li>
+      <li data-id="2" data-age="20"></li>
+      <li data-id="3" data-age="30"></li>
+      <li data-id="4" data-age="20"></li>
+      <li data-id="5" data-age="50"></li>
+    </ul>
+    <button onclick="abc(event)">grid-list-lg</button>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      axios
+        .get("https://www.zerocho.com/api/get")
+        .then((result) => {
+          console.log(result);
+          console.log(result.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      const formData = new FormData();
+      formData.append("name", "kws");
+      console.log(formData.getAll("name"));
+
+      function abc(e) {
+        const li = document.body.querySelectorAll("li");
+        let getDataList = [];
+        console.log(li)
+        li.forEach((item) => {
+          getDataList.push({ id: item.dataset.id, age: item.dataset.age });
+          item.textContent =`내 나이가 ${item.dataset.age}라니 엿같네~`
+        });
+      }
+    </script>
+  </body>
+</html>
