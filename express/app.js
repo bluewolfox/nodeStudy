@@ -1,14 +1,15 @@
 const express = require("express");
 const path = require("path");
 const app = express();
+const morgan = require('morgan');
+
 
 // 전역 변수 느낌
 app.set("port", process.env.PORT || 3000);
 
-app.use((req, res, next) => {
-  console.log("모든 요청에 실행하고 싶어요");
-  next();
-});
+// 무슨 요청,응답을 받았는지 console에서 보여줌
+// dev // combined
+app.use(morgan("dev"))
 
 app.get("/", (req, res, next) => {
   // send, sendFile, json, render 모두 응답 메서드
