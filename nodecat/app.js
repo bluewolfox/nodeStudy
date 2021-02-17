@@ -5,6 +5,7 @@ const session = require('express-session');
 const nunjucks = require('nunjucks');
 const dotenv = require('dotenv');
 
+
 dotenv.config();
 const indexRouter = require("./routes")
 
@@ -14,21 +15,21 @@ app.set("view engine", "html");
 nunjucks.configure("views", {
   express: app,
   watch: true
-})
+});
 
 app.use(morgan("dev"));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session({
   resave: false,
   saveUninitialized: false,
-  secret: process.env.COOKIE_SECRET,
+  secret: process.env.CLIENT_SECRET,
   cookie: {
     httpOnly: true,
     secure: false
   }
-}))
+}));
 
-app.use("/", indexRouter);
+app.use("/",indexRouter)
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);

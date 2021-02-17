@@ -23,10 +23,10 @@ router.post("/token", async (req, res) => {
       });
     }
     const token = jwt.sign({ // jwt.sign() 토큰발급 첫번째 인수에 id,nick같은 필요한데이터를 넣는다. 두번째 인자에 JWT_SECRET을 넣는다. 세번째가 유효기간과 issuer = 발급자. 를 넣어준다.
-      id: domain.user.id,
-      nick: domain.user.nick
+      id: domain.User.id,
+      nick: domain.User.nick
     }, process.env.JWT_SECRET, {
-      expiresIn: "1m", // 만료기간
+      expiresIn: "10m", // 만료기간
       issuer: "nodebird" // 발급자
     });
 
