@@ -1,14 +1,27 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
+const url = require('url');
 
-const { verifyToken, deprecated } = require("./middlewares")
+const { verifyToken, apiLimiter } = require("./middlewares")
 const { Domain, User, Post, Hashtag } = require("../models");
 
 const router = express.Router();
+router.use(async(req, res, next) => {
+  const domain = await Domain.findOne({
+    where: { host: url.parse(req.get("origin"))?.host } // [앞]?.[뒤] => node14부터 가능한 [앞]의 것이 undefined면 undefined , 값이 있으면 객체 안에서 host를 꺼낸다
+  })
+  if (domain) {
+    cors({
+      origin: true,
+      credentials: true
+    })(req, res, next);
+  } else {
+    next();
+  }
+})
 
-router.use(deprecated);
-
-router.post("/token", async (req, res) => {
+router.post("/token", apiLimiter, async (req, res) => {
   const { clientSecret } = req.body;
   try {
     const domain = await Domain.findOne({
@@ -31,7 +44,6 @@ router.post("/token", async (req, res) => {
       expiresIn: "1m", // 만료기간
       issuer: "nodebird" // 발급자
     });
-
     return res.json({
       code: 200,
       message: "토큰이 발급되었습니다.",
@@ -46,11 +58,11 @@ router.post("/token", async (req, res) => {
   }
 })
 
-router.get("/test", verifyToken, (req, res) => {
+router.get("/test", verifyToken, apiLimiter, (req, res) => {
   res.json(req.decoded)
 })
 
-router.get("/posts/my", verifyToken, (req, res) => {
+router.get("/posts/my", verifyToken, apiLimiter, (req, res) => {
   Post.findAll({ where: { userId: req.decoded.id } })
     .then((posts) => {
       res.json({
@@ -67,7 +79,7 @@ router.get("/posts/my", verifyToken, (req, res) => {
     })
 })
 
-router.get("/posts/hashtag/:title", verifyToken, async (req, res) => {
+router.get("/posts/hashtag/:title", verifyToken, apiLimiter, async (req, res) => {
   try {
     const hashtag = await Hashtag.findOne({ where: { title: req.params.title } });
     if (!hashtag) {
@@ -84,8 +96,8 @@ router.get("/posts/hashtag/:title", verifyToken, async (req, res) => {
   } catch (error) {
     console.error(error);
     return resizeBy.status(500).json({
-      code:500,
-      message:"서버 에러"
+      code: 500,
+      message: "서버 에러"
     })
   }
 })
