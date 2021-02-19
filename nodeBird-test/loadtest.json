@@ -1,0 +1,36 @@
+{
+  "config": {
+    "target": "http://localhost:8001",
+    "phases": [
+      {
+        "dulation": 60,
+        "arrivalRate": 30
+      }
+    ]
+  },
+  "scenarios": [
+    {
+      "flow": [
+        {
+          "get": {
+            "url": "/"
+          }
+        },
+        {
+          "post": {
+            "url": "/auth/login",
+            "json": {
+              "email": "uox0091@gmail.com",
+              "password": "Rladnjstjr2*"
+            }
+          }
+        },
+        {
+          "get": {
+            "url": "/hashtag?hastag=node"
+          }
+        }
+      ]
+    }
+  ]
+}
