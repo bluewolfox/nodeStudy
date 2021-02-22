@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>GIF 채팅방</title>
+  </head>
+  <body>
+    <div>F12를 눌러 console 탭과 network 탭을 확인하세요.</div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io.connect("http://localhost:8005", {
+        path: "/socket.io",
+        transports: ["websocket"], // Socket.IO는 먼저 폴링 방식으로 연결 후(웹 소켓을 지원하지 않는 브라우저를 위해), 웹 소켓을 사용할 수 있다면 웹 소켓으로 업그레이드, 웹 소켓만 사용하고 싶다면 transports 옵션을 다음과 같이 주면 됨
+      });
+      socket.on("news", function (data) {
+        console.log(data);
+        socket.emit("reply", "Hello Node.JS");
+      });
+    </script>
+  </body>
+</html>
