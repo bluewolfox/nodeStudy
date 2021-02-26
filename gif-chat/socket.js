@@ -1,7 +1,9 @@
+// socket.js
 const SocketIO = require('socket.io');
 
 module.exports = (server) => {
   const io = SocketIO(server, { path: '/socket.io' });
+  // path는 프론트와 연결시키려고 설정
 
   io.on("connection", (socket) => {
     const req = socket.request;
