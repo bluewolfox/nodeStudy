@@ -9,7 +9,7 @@
   "author": "Zero Cho",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "color-hash": "^1.0.3",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
